@@ -1,0 +1,362 @@
+[
+  {
+    "code": "2_43",
+    "name": "リップも入る小物入れ",
+    "defaultTemplateId": "noshi_no5_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_42",
+    "name": "バレッタ",
+    "defaultTemplateId": "noshi_no5_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_41",
+    "name": "印鑑入れ",
+    "defaultTemplateId": "noshi_no5_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_40",
+    "name": "キーホルダー",
+    "defaultTemplateId": "noshi_no5_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_4",
+    "name": "ぐるっとF長財布(ラウンド)",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_37",
+    "name": "手鏡",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_36",
+    "name": "箱まち小銭入れ(OP)",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_34",
+    "name": "三つ折ミニ財布",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_32",
+    "name": "パスカードホルダ",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_30",
+    "name": "F小銭入れ",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_29",
+    "name": "すっきりカード",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_27",
+    "name": "天溝がま口",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_24",
+    "name": "箱まち口金付札入(がま札)",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_23",
+    "name": "二つ折Fミニ財布(ぐるFミニ)",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_22",
+    "name": "メガネケース",
+    "defaultTemplateId": "noshi_no3_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_19",
+    "name": "束入れ",
+    "defaultTemplateId": "noshi_no3_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "2_15",
+    "name": "パーソナルホルダー",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_9",
+    "name": "がま口長財布",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_8",
+    "name": "サコッシュ",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_7",
+    "name": "B6ノートカバー",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_6",
+    "name": "A5ノートカバー",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_5",
+    "name": "L字ファスナーの長財布(L長)",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_38",
+    "name": "ミニ6穴",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_35",
+    "name": "IDカードホルダー",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_33",
+    "name": "ぷちっと小銭入れ",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_3",
+    "name": "ポーチ",
+    "defaultTemplateId": "noshi_no1_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_26",
+    "name": "L字F小さなお財布(Lミニ)",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_25",
+    "name": "四角いがま口",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_20",
+    "name": "ひとえ束入れ",
+    "defaultTemplateId": "noshi_no3_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_2",
+    "name": "クラッチ",
+    "defaultTemplateId": "noshi_no1_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_17",
+    "name": "A5エンベロープ",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_16",
+    "name": "がま口ペンケース",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_14",
+    "name": "文庫ブックカバー",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_12",
+    "name": "プレート大(インテリアプレート大)",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_11",
+    "name": "プレート小(インテリアプレート小)",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "1_10",
+    "name": "新書ブックカバー",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_45",
+    "name": "扇子袋",
+    "defaultTemplateId": "noshi_no6_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_44",
+    "name": "ペンケース",
+    "defaultTemplateId": "noshi_no6_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_39",
+    "name": "スマホケース(小)",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_31",
+    "name": "キーケース",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_28",
+    "name": "カードケース",
+    "defaultTemplateId": "noshi_no4_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_21",
+    "name": "スマホケース(大)",
+    "defaultTemplateId": "noshi_no3_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_18",
+    "name": "乙女ポーチ",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_13",
+    "name": "通帳ケース",
+    "defaultTemplateId": "noshi_no2_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  },
+  {
+    "code": "0_1",
+    "name": "ショルダーウォレット",
+    "defaultTemplateId": "noshi_no1_chou",
+    "defaultKnotType": "蝶結び",
+    "noshiEnabled": true,
+    "note": ""
+  }
+]

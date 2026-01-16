@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>熨斗PDFツール</title>
+  <style>
+    body{
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 12px;
+  background: #f6f7f9;
+
+  display: grid;          /* ★ここ */
+  grid-template-rows: auto 1fr; /* ★タイトル行 + 本体 */
+  gap: 10px;
+  height: 100vh;          /* ★ここ */
+  box-sizing: border-box;
+}
+
+.container{
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 12px;
+  align-items: stretch;
+  min-height: 0;          /* ★これ重要（中のiframeが伸びる） */
+}
+
+.previewWrap{
+  min-height: 0;          /* ★これ重要 */
+  display: grid;
+  grid-template-rows: 42px 1fr;
+}
+#preview{
+  height: 100%;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  font-size: 13px;
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 86px 1fr; /* 14インチで詰まりにくい */
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+label {
+  font-size: 12px;
+  color: #222;
+}
+
+select, input, textarea, button {
+  font-size: 14px;
+}
+
+select, input, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cfd6dd;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.helper {
+  font-size: 12px;
+  color: #1f3b64;
+  background: #eef4ff;
+  border: 1px solid #d6e6ff;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.templateInfo {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.primary {
+  width: 100%;
+  padding: 12px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary:hover { opacity: 0.92; }
+
+.previewWrap {
+  height: 80%;
+  min-height: calc(100vh - 54px);  /* ★保険 */
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid #eef0f3;
+  background: #fafbfc;
+}
+
+.previewTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+}
+
+.ghost {
+  border: 1px solid #cfd6dd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+}
+
+.ghost:hover { background: #f3f4f6; }
+
+#preview {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+  </style>
+</head>
+<body>
+  <h1>熨斗PDFツール</h1>
+
+  <div class="container">
+    <!-- 左：操作パネル -->
+    <div>
+      <form id="noshiForm">
+        <div class="card">
+          <h2>1. アイテム選択</h2>
+          <div class="row">
+            <label for="itemSelect">アイテム</label>
+            <select id="itemSelect"></select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>2. 熨斗の設定</h2>
+
+          <div class="row">
+            <label for="knotSelect">結び方</label>
+            <select id="knotSelect">
+              <option value="蝶結び">蝶結び</option>
+              <option value="結び切り">結び切り</option>
+            </select>
+          </div>
+
+          <div class="row">
+           <label>表書き</label>
+            <!-- 表書きプルダウン -->
+            <select id="titleSelect"></select>
+
+            <!-- 自由記載入力欄 -->
+            <input
+              id="freeTitleInput"
+              type="text"
+              placeholder="自由記載（5文字以内）"
+              maxlength="5"
+              disabled
+              style="margin-top:8px; width:240px;"
+            />
+          </div>
+
+          <div class="helper" style="margin-top: 8px;">
+            表書きはプルダウンから選択（空白は手書き用）
+            「自由記載」を選ぶと入力できます（最大5文字）
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>3. お名前</h2>
+
+          <div class="row" style="align-items:start;">
+            <label for="nameInput">名前</label>
+            <textarea id="nameInput" placeholder="例）（有）田中商店&#10;田中草太郎"></textarea>
+          </div>
+
+          <div id="nameHelper" class="helper"></div>
+        </div>
+
+        <div class="card">
+          <div id="templateInfo" class="templateInfo"></div>
+          <button class="primary" type="submit">PDF作成 & プレビュー</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 右：プレビュー -->
+    <div class="previewWrap">
+      <div class="previewHeader">
+        <div class="previewTitle">プレビュー</div>
+        <button type="button" class="ghost" id="printBtn">印刷</button>
+      </div>
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+
+  <!-- pdf-lib -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+
+  <!-- fontkit -->
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+
+  <script>
+  // ===== 定数 =====
+  const MM_TO_PT = 72 / 25.4;
+  const NOTO_FONT_URL = "fonts/NotoSerifJP-VariableFont_wght.ttf";
+
+  // ===== マスタ（JSONから読み込む）=====
+  let noshiTemplates = {};
+  let items = [];
+  let titleOptions = [];
+
+  async function loadMasters() {
+    const tplUrl = "data/noshiTemplates.json";
+    const itemUrl = "data/items.json";
+    const titleUrl = "data/titleOptions.json";
+
+    let tplRes, itemRes, titleRes;
+    try {
+      [tplRes, itemRes, titleRes] = await Promise.all([
+        fetch(tplUrl),
+        fetch(itemUrl),
+        fetch(titleUrl),
+      ]);
+    } catch (err) {
+      console.error("マスタファイルの取得に失敗しました:", err);
+      console.error(`失敗したURL候補: ${tplUrl}, ${itemUrl}, ${titleUrl}`);
+      throw new Error(`マスタファイルの取得に失敗しました。詳細はコンソールを確認してください。`);
+    }
+
+    if (!tplRes.ok) {
+      console.error(`data/noshiTemplates.json の読み込みに失敗しました: ${tplRes.status} ${tplRes.statusText} (URL: ${tplUrl})`);
+      throw new Error(`data/noshiTemplates.json が読めません (ステータス: ${tplRes.status})`);
+    }
+    if (!itemRes.ok) {
+      console.error(`data/items.json の読み込みに失敗しました: ${itemRes.status} ${itemRes.statusText} (URL: ${itemUrl})`);
+      throw new Error(`data/items.json が読めません (ステータス: ${itemRes.status})`);
+    }
+    if (!titleRes.ok) {
+      console.error(`data/titleOptions.json の読み込みに失敗しました: ${titleRes.status} ${titleRes.statusText} (URL: ${titleUrl})`);
+      throw new Error(`data/titleOptions.json が読めません (ステータス: ${titleRes.status})`);
+    }
+
+    try {
+      noshiTemplates = await tplRes.json();
+      items = await itemRes.json();
+      titleOptions = await titleRes.json();
+    } catch (err) {
+      console.error("JSONのパースに失敗しました:", err);
+      throw new Error("マスタファイルのJSONパースに失敗しました。詳細はコンソールを確認してください。");
+    }
+  }
+
+  // ===== DOM 取得 =====
+  const itemSelect   = document.getElementById("itemSelect");
+  const knotSelect   = document.getElementById("knotSelect");
+  const titleSelect  = document.getElementById("titleSelect");
+  const nameInput    = document.getElementById("nameInput");
+  const nameHelper   = document.getElementById("nameHelper");
+  const templateInfo = document.getElementById("templateInfo");
+  const previewFrame = document.getElementById("preview");
+  const form         = document.getElementById("noshiForm");
+  const printBtn     = document.getElementById("printBtn");
+
+  const freeTitleInput   = document.getElementById("freeTitleInput");
+  const titleFreeHelper  = document.getElementById("titleFreeHelper");
+
+  // ===== 自由記載UI（★これだけに統一）=====
+  function updateFreeTitleUI() {
+    // titleSelect / freeTitleInput が無い環境でも落ちないように
+    if (!titleSelect || !freeTitleInput) return;
+
+    const isFree = titleSelect.value === "__free__";
+    freeTitleInput.disabled = !isFree;
+
+    if (!isFree) {
+      freeTitleInput.value = "";
+    } else {
+      // 任意：自由記載を選んだ瞬間にフォーカスしたいなら
+      freeTitleInput.focus();
+    }
+  }
+
+  function clampFreeTitle() {
+    if (!freeTitleInput) return;
+    if (freeTitleInput.value.length > 5) {
+      freeTitleInput.value = freeTitleInput.value.slice(0, 5);
+    }
+  }
+
+  // ===== 印刷ボタン =====
+  printBtn.addEventListener("click", () => {
+    if (!previewFrame.src) {
+      alert("先にPDFを作成してください");
+      return;
+    }
+    previewFrame.contentWindow?.focus();
+    previewFrame.contentWindow?.print();
+  });
+
+  // ===== 選択中アイテム & 結び方からテンプレを見つける =====
+  function findTemplateForSelection() {
+    const itemCode  = itemSelect.value;
+    const knotValue = knotSelect.value; // "蝶結び" / "結び切り"
+
+    const item = items.find((it) => it.code === itemCode);
+    if (!item) return null;
+
+    const baseTemplate = noshiTemplates[item.defaultTemplateId];
+    if (!baseTemplate) return null;
+
+    const candidates = Object.values(noshiTemplates).filter(
+      (tpl) => tpl.sizeCode === baseTemplate.sizeCode && tpl.knotType === knotValue
+    );
+
+    return candidates[0] || baseTemplate;
+  }
+
+  // ===== 名前入力の制約（何行何文字まで）をUIに反映 =====
+  function applyNameConstraints(template) {
+    const cfg = template.name;
+    const maxLines   = cfg.maxLines || 1;
+    const maxPerLine = cfg.maxCharsPerLine || cfg.maxChars || 10;
+
+    nameHelper.textContent =
+      `1行あたり最大${maxPerLine}文字・最大${maxLines}行まで（改行で複数列）`;
+
+    let isComposing = false;
+
+    function clamp() {
+      let lines = nameInput.value.split(/\r?\n/);
+
+      if (lines.length > maxLines) {
+        lines = lines.slice(0, maxLines);
+      }
+
+      lines = lines.map((line) =>
+        line.length > maxPerLine ? line.slice(0, maxPerLine) : line
+      );
+
+      const fixed = lines.join("\n");
+      if (fixed !== nameInput.value) {
+        const pos = nameInput.selectionStart ?? fixed.length;
+        nameInput.value = fixed;
+        nameInput.selectionStart = nameInput.selectionEnd =
+          Math.min(pos, fixed.length);
+      }
+    }
+
+    nameInput.oncompositionstart = () => { isComposing = true; };
+    nameInput.oncompositionend   = () => { isComposing = false; clamp(); };
+
+    nameInput.oninput = () => {
+      if (isComposing) return;
+      clamp();
+    };
+  }
+
+  // ===== テンプレ情報表示 =====
+  function updateTemplateInfo(template) {
+    templateInfo.textContent =
+      `テンプレート: ${template.templateName} ` +
+      `（ID: ${template.id}, サイズ: ${template.sizeCode}, 結び方: ${template.knotType}）`;
+  }
+
+  // ===== アイテム or 結び方が変わったとき =====
+  function onTemplateSourceChanged() {
+    const tpl = findTemplateForSelection();
+    if (!tpl) {
+      templateInfo.textContent = "テンプレートが見つかりません。";
+      return;
+    }
+    applyNameConstraints(tpl);
+    updateTemplateInfo(tpl);
+  }
+
+  // ===== フォントサイズ計算 =====
+  function calcFontSize(config, text) {
+    if (!text || text.length === 0) return config.baseFontSize;
+
+    const lines = text.split(/\r?\n/);
+    const maxLen = Math.max(...lines.map((l) => l.length || 0));
+
+    const base = config.baseFontSize;
+    const min  = config.minFontSize ?? base;
+
+    const hardMax = config.maxCharsPerLine ?? config.maxChars ?? 10;
+    const start   = config.shrinkStartChars ?? hardMax;
+
+    if (maxLen <= start) return base;
+    if (hardMax <= start) return Math.max(min, base);
+
+    const t = (maxLen - start) / (hardMax - start);
+    const size = base + (min - base) * Math.min(1, Math.max(0, t));
+    return Math.max(min, size);
+  }
+
+  // ===== 縦書き描画 =====
+  function drawVerticalText(page, text, config, font, fontSize) {
+    if (!text) return;
+
+    const lineGap = config.lineGapPt ?? 2;
+    const colGapPt = (config.columnGapMm ? config.columnGapMm * MM_TO_PT : fontSize);
+
+    const centerX = config.xMm * MM_TO_PT;
+    const pageHeight = page.getSize().height;
+
+    const cols = text.split(/\r?\n/).filter((s) => s.length > 0);
+    if (cols.length === 0) return;
+
+    const numCols = cols.length;
+    const totalWidth = (numCols - 1) * colGapPt;
+    const rightMostCenterX = centerX + totalWidth / 2;
+
+    const lens = cols.map((c) => c.length);
+    const maxLen = Math.max(...lens);
+    const maxHeight = maxLen * fontSize + (maxLen - 1) * lineGap;
+
+    const yBase = pageHeight - config.yMm * MM_TO_PT;
+
+    const blockTopY =
+      (config.align === "top")
+        ? (yBase - fontSize)
+        : (yBase + maxHeight / 2 - fontSize);
+
+    for (let i = 0; i < numCols; i++) {
+      const line = cols[i];
+      let y = blockTopY;
+
+      const colCenterX = rightMostCenterX - i * colGapPt;
+
+      for (const ch of line) {
+        const charWidth = font.widthOfTextAtSize(ch, fontSize);
+        const x = colCenterX - charWidth / 2;
+
+        page.drawText(ch, { x, y, size: fontSize, font });
+
+        y -= fontSize + lineGap;
+      }
+    }
+  }
+
+  function normalizeForVertical(text) {
+    if (!text) return "";
+
+    text = text
+      .replace(/\(株\)|（株）/g, "㈱")
+      .replace(/\(有\)|（有）/g, "㈲")
+      .replace(/\(同\)|（同）/g, "㈾");
+
+    return text
+      .replace(/\(/g, "（")
+      .replace(/\)/g, "）")
+      .replace(/-/g, "－")
+      .replace(/~/g, "〜");
+  }
+
+  // ===== PDF生成 =====
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const templateConfig = findTemplateForSelection();
+    if (!templateConfig) {
+      alert("テンプレートが見つかりません");
+      return;
+    }
+
+    const selectedTitleId = titleSelect.value;
+    const titleObj = titleOptions.find(t => t.id === selectedTitleId);
+
+    let rawTitleText = "";
+    if (selectedTitleId === "__free__") {
+      rawTitleText = (freeTitleInput.value || "").trim();
+    } else {
+      rawTitleText = titleObj ? titleObj.text : "";
+    }
+
+    const rawNameText = nameInput.value;
+
+    const titleText = normalizeForVertical(rawTitleText);
+    const nameText  = normalizeForVertical(rawNameText);
+
+    try {
+      const templateUrl = templateConfig.templateUrl;
+      let templateRes;
+      try {
+        templateRes = await fetch(templateUrl);
+      } catch (err) {
+        console.error(`PDFテンプレートの取得に失敗しました:`, err, `(URL: ${templateUrl})`);
+        alert(`${templateUrl} が読めません`);
+        return;
+      }
+      if (!templateRes.ok) {
+        console.error(`PDFテンプレートの読み込みに失敗しました: ${templateRes.status} ${templateRes.statusText} (URL: ${templateUrl})`);
+        alert(`${templateUrl} が読めません (ステータス: ${templateRes.status})`);
+        return;
+      }
+
+      const existingPdfBytes = await templateRes.arrayBuffer();
+      const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+
+      pdfDoc.registerFontkit(fontkit);
+      
+      let fontRes;
+      try {
+        fontRes = await fetch(NOTO_FONT_URL);
+      } catch (err) {
+        console.error(`フォントファイルの取得に失敗しました:`, err, `(URL: ${NOTO_FONT_URL})`);
+        alert(`${NOTO_FONT_URL} が読めません`);
+        return;
+      }
+      if (!fontRes.ok) {
+        console.error(`フォントファイルの読み込みに失敗しました: ${fontRes.status} ${fontRes.statusText} (URL: ${NOTO_FONT_URL})`);
+        alert(`${NOTO_FONT_URL} が読めません (ステータス: ${fontRes.status})`);
+        return;
+      }
+      const fontBytes = await fontRes.arrayBuffer();
+      const notoFont = await pdfDoc.embedFont(fontBytes);
+
+      const page = pdfDoc.getPage(0);
+
+      const titleFontSize = calcFontSize(templateConfig.title, titleText);
+      const nameFontSize  = calcFontSize(templateConfig.name, nameText);
+
+      drawVerticalText(page, titleText, templateConfig.title, notoFont, titleFontSize);
+      drawVerticalText(page, nameText, templateConfig.name, notoFont, nameFontSize);
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url  = URL.createObjectURL(blob);
+      previewFrame.src = url;
+    } catch (err) {
+      console.error("PDF作成中にエラーが発生しました:", err);
+      alert(`PDF作成中にエラーが発生しました。\n\nエラー: ${err.message || err}\n詳細はコンソールを確認してください。`);
+    }
+  });
+
+  // ===== UI初期化（JSONを読んでから）=====
+  async function initUI() {
+    await loadMasters();
+
+    // アイテムセレクト生成
+    itemSelect.innerHTML = "";
+    items.forEach((it) => {
+      const opt = document.createElement("option");
+      opt.value = it.code;
+      opt.textContent = it.name;
+      itemSelect.appendChild(opt);
+    });
+
+    // 表書きセレクト生成
+    titleSelect.innerHTML = "";
+    titleOptions
+      .sort((a,b)=>a.sortOrder-b.sortOrder)
+      .forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.label ?? t.text;
+        titleSelect.appendChild(opt);
+      });
+
+    // ★自由記載UIのイベントはここで1回だけ
+    titleSelect.addEventListener("change", updateFreeTitleUI);
+    freeTitleInput.addEventListener("input", () => {
+      clampFreeTitle();
+    });
+
+    // 初期選択
+    if (items.length > 0) itemSelect.value = items[0].code;
+    knotSelect.value = "蝶結び";
+
+    // 初期状態反映（disabled切替）
+    updateFreeTitleUI();
+    clampFreeTitle();
+
+    // changeイベント
+    itemSelect.addEventListener("change", onTemplateSourceChanged);
+    knotSelect.addEventListener("change", onTemplateSourceChanged);
+
+    onTemplateSourceChanged();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initUI().catch((err) => {
+      console.error("マスタ読み込みでエラーが発生しました:", err);
+      alert(`マスタ読み込みでエラーが発生しました。\n\nエラー: ${err.message || err}\n詳細はコンソールを確認してください。`);
+    });
+  });
+</script>
+
+</body>
+</html>

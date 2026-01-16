@@ -1,0 +1,129 @@
+[
+  {
+    "id": "keiji_1",
+    "text": "御祝",
+    "label":"御祝",
+    "category": "慶事全般（婚礼以外）",
+    "sortOrder": 2,
+    "enabled": true
+  },
+  {
+    "id": "keiji_2",
+    "text": "御慶",
+    "label": "御慶",
+    "category": "慶事全般（婚礼以外）",
+    "sortOrder": 5,
+    "enabled": true
+  },
+  {
+    "id": "keiji_3",
+    "text": "御礼",
+    "label": "御礼",
+    "category": "慶事全般（婚礼以外）",
+    "sortOrder": 1,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_1",
+    "text": "御出産御祝",
+    "label": "御出産御祝",
+    "category": "出産・七五三・入学など",
+    "sortOrder": 6,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_2",
+    "text": "七五三御祝",
+    "label": "七五三御祝",
+    "category": "出産・七五三・入学など",
+    "sortOrder": 7,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_3",
+    "text": "御入学御祝",
+    "label": "御入学御祝",
+    "category": "出産・七五三・入学など",
+    "sortOrder": 8,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_4",
+    "text": "御進学御祝",
+    "label": "御進学御祝",
+    "category": "出産・七五三・入学など",
+    "sortOrder": 9,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_5",
+    "text": "御成人御祝",
+    "label": "御成人御祝",
+    "category": "出産・七五三・入学など",
+    "sortOrder": 10,
+    "enabled": true
+  },
+  {
+    "id": "konrei_1",
+    "text": "御結婚御祝",
+    "label": "御結婚御祝",
+    "category": "婚礼（結婚祝い）",
+    "sortOrder": 4,
+    "enabled": true
+  },
+  {
+    "id": "konrei_2",
+    "text": "寿",
+    "label": "寿",
+    "category": "婚礼（結婚祝い）",
+    "sortOrder": 3,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_6",
+    "text": "御新築御祝",
+    "label": "御新築御祝",
+    "category": "新築・開店・昇進など",
+    "sortOrder": 11,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_7",
+    "text": "御開店御祝",
+    "label": "御開店御祝",
+    "category": "新築・開店・昇進など",
+    "sortOrder": 12,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_8",
+    "text": "御昇進御祝",
+    "label": "御昇進御祝",
+    "category": "新築・開店・昇進など",
+    "sortOrder": 13,
+    "enabled": true
+  },
+  {
+    "id": "oiwai_9",
+    "text": "御長寿御祝",
+    "label": "御長寿御祝",
+    "category": "新築・開店・昇進など",
+    "sortOrder": 14,
+    "enabled": true
+  },
+  {
+    "id": "blank",
+    "text": "",
+    "label": "（空白）※手書き用",
+    "category": "",
+    "sortOrder": 998,
+    "enabled": true
+  },
+  { "id": "__free__",
+    "text": "",
+    "label": "※自由記載※", 
+    "category": "",
+    "sortOrder": 999,
+    "enabled": true
+  }
+]
