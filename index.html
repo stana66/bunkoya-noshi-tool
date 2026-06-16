@@ -107,6 +107,14 @@ textarea {
 
 .primary:hover { opacity: 0.92; }
 
+.primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.primary:disabled:hover { opacity: 1; }
+
 .previewWrap {
   height: 80%;
   min-height: calc(100vh - 54px);  /* ★保険 */
@@ -149,6 +157,61 @@ textarea {
   border-color: #d0d4d9;
   cursor: not-allowed;
 }
+
+.freeTitleFieldWrap {
+  position: relative;
+  margin-top: 8px;
+  width: 240px;
+}
+
+.freeTitleFieldWrap input {
+  width: 100%;
+  padding-right: 32px;
+}
+
+.freeTitleWarn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.freeTitleWarnIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #e57373;
+  color: #e57373;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+}
+
+.freeTitleWarnTooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  width: 240px;
+  transform: translateX(-50%);
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e57373;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.freeTitleWarn:hover .freeTitleWarnTooltip {
+  display: block;
+}
   </style>
 </head>
 <body>
@@ -173,7 +236,8 @@ textarea {
             <label for="knotSelect">結び方</label>
             <select id="knotSelect">
               <option value="蝶結び">蝶結び</option>
-              <option value="結び切り">結び切り</option>
+              <option value="結び切り5本">結び切り5本</option>
+              <option value="結び切り10本(婚礼)">結び切り10本(婚礼)</option>
             </select>
           </div>
 
@@ -183,18 +247,23 @@ textarea {
             <select id="titleSelect"></select>
 
             <!-- 自由記載入力欄 -->
-            <input
-              id="freeTitleInput"
-              type="text"
-              placeholder="自由記載（5文字以内）"
-              maxlength="5"
-              disabled
-              style="margin-top:8px; width:240px;"
-            />
+            <div class="freeTitleFieldWrap">
+              <input
+                id="freeTitleInput"
+                type="text"
+                placeholder="自由記載（5文字以内）"
+                maxlength="5"
+                disabled
+              />
+              <span class="freeTitleWarn" id="freeTitleWarn" hidden>
+                <span class="freeTitleWarnIcon" aria-label="注意">!</span>
+                <span class="freeTitleWarnTooltip">表書きが四文字（死文字）の場合はお客様が気にされる場合があるのでご注意ください</span>
+              </span>
+            </div>
           </div>
 
           <div class="helper" style="margin-top: 8px;">
-            表書きはプルダウンから選択（空白は手書き用）
+            表書きはプルダウンから選択
             「自由記載」を選ぶと入力できます（最大5文字）
           </div>
         </div>
@@ -212,7 +281,7 @@ textarea {
 
         <div class="card">
           <div id="templateInfo" class="templateInfo"></div>
-          <button class="primary" type="submit">PDF作成 & プレビュー</button>
+          <button class="primary" type="submit" id="submitBtn">PDF作成 & プレビュー</button>
         </div>
       </form>
     </div>
@@ -221,7 +290,7 @@ textarea {
     <div class="previewWrap">
       <div class="previewHeader">
         <div class="previewTitle">プレビュー</div>
-        <button type="button" class="ghost" id="printBtn">印刷</button>
+        <button type="button" class="ghost" id="printBtn">印刷(A4で印刷してください)</button>
       </div>
       <iframe id="preview"></iframe>
     </div>
@@ -295,9 +364,19 @@ textarea {
   const previewFrame = document.getElementById("preview");
   const form         = document.getElementById("noshiForm");
   const printBtn     = document.getElementById("printBtn");
+  const submitBtn    = document.getElementById("submitBtn");
 
   const freeTitleInput   = document.getElementById("freeTitleInput");
+  const freeTitleWarn    = document.getElementById("freeTitleWarn");
   const titleFreeHelper  = document.getElementById("titleFreeHelper");
+
+  function updateFreeTitleWarnVisibility() {
+    if (!freeTitleWarn || !freeTitleInput || !titleSelect) return;
+
+    const isFree = titleSelect.value === "__free__";
+    const isFourChars = freeTitleInput.value.trim().length === 4;
+    freeTitleWarn.hidden = !(isFree && isFourChars);
+  }
 
   // ===== 自由記載UI（★これだけに統一）=====
   function updateFreeTitleUI() {
@@ -309,6 +388,7 @@ textarea {
 
     if (!isFree) {
       freeTitleInput.value = "";
+      if (freeTitleWarn) freeTitleWarn.hidden = true;
     } else {
       // 任意：自由記載を選んだ瞬間にフォーカスしたいなら
       freeTitleInput.focus();
@@ -335,7 +415,7 @@ textarea {
   // ===== 選択中アイテム & 結び方からテンプレを見つける =====
   function findTemplateForSelection() {
     const itemCode  = itemSelect.value;
-    const knotValue = knotSelect.value; // "蝶結び" / "結び切り"
+    const knotValue = knotSelect.value; // "蝶結び" / "結び切り5本" / "結び切り10本(婚礼)"
 
     const item = items.find((it) => it.code === itemCode);
     if (!item) return null;
@@ -514,6 +594,10 @@ textarea {
     const titleText = normalizeForVertical(rawTitleText);
     const nameText  = normalizeForVertical(rawNameText);
 
+    const originalLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "反映中...";
+
     try {
       const templateUrl = templateConfig.templateUrl;
       let templateRes;
@@ -566,6 +650,9 @@ textarea {
     } catch (err) {
       console.error("PDF作成中にエラーが発生しました:", err);
       alert(`PDF作成中にエラーが発生しました。\n\nエラー: ${err.message || err}\n詳細はコンソールを確認してください。`);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
     }
   });
 
@@ -597,7 +684,9 @@ textarea {
     titleSelect.addEventListener("change", updateFreeTitleUI);
     freeTitleInput.addEventListener("input", () => {
       clampFreeTitle();
+      if (freeTitleWarn) freeTitleWarn.hidden = true;
     });
+    freeTitleInput.addEventListener("blur", updateFreeTitleWarnVisibility);
 
     // 初期選択
     if (items.length > 0) itemSelect.value = items[0].code;
